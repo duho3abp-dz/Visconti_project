@@ -437,7 +437,7 @@ section {
 
 .header {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   width: 95%;
@@ -1066,35 +1066,92 @@ section {
   background-repeat: no-repeat;
 }
 .sixth-section__buttons {
+  width: 100%;
+  height: 40px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+}
+.sixth-section__buttons:hover .sixth-section__btn {
+  animation-name: unset;
 }
 .sixth-section__prev, .sixth-section__next {
-  margin: 22px;
+  width: 45%;
+  overflow: hidden;
+  position: relative;
   opacity: 1;
   cursor: pointer;
-  position: relative;
 }
-.sixth-section__prev::after, .sixth-section__next::after {
+.sixth-section__btn {
+  position: absolute;
+  width: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.sixth-section__btn::after {
   content: "";
   width: 134px;
-  height: 1.5px;
+  height: 2px;
   background: #000000;
   position: absolute;
   left: 28px;
-  top: 45%;
+  top: 50%;
   transform: translateY(-50%);
 }
-.sixth-section--non {
-  opacity: 0.3;
+.sixth-section__btn--next {
+  left: 0%;
+  padding-right: 5px;
+  animation-name: sixth-section-btn-animation-next;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
 }
-.sixth-section__prev--rotate {
+@keyframes sixth-section-btn-animation-next {
+  0% {
+    padding-right: 5px;
+    padding-left: 0px;
+  }
+  50% {
+    padding-right: 0px;
+    padding-left: 5px;
+  }
+  100% {
+    padding-right: 5px;
+    padding-left: 0px;
+  }
+}
+.sixth-section__btn--prev {
+  right: 0%;
+  padding-left: 5px;
+  animation-name: sixth-section-btn-animation-prev;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+@keyframes sixth-section-btn-animation-prev {
+  0% {
+    padding-right: 0px;
+    padding-left: 5px;
+  }
+  50% {
+    padding-right: 5px;
+    padding-left: 0px;
+  }
+  100% {
+    padding-right: 0px;
+    padding-left: 5px;
+  }
+}
+.sixth-section__btn--prev--rotate {
   transform: rotate(-180deg);
 }
-.sixth-section__prev::after {
+.sixth-section__btn--prev::after {
   left: unset;
   right: 28px;
+}
+.sixth-section--non .sixth-section__btn {
+  opacity: 0.3;
+  animation-name: unset;
+}
+.sixth-section--non .sixth-section__btn::after {
+  height: 1px;
 }
 .sixth-section__text {
   font-weight: 400;
@@ -1174,11 +1231,11 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: 0.3s;
+  transition: 0.5s;
 }
 .seventh-section__slide {
   width: 376px;
-  height: 346px;
+  height: 100%;
   overflow: hidden;
   margin-right: 17.5px;
   margin-left: 17.5px;
@@ -1190,7 +1247,7 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  transition: 0.3s;
+  transition: 0.5s;
 }
 .seventh-section__slide--text {
   font-size: 17px;
@@ -1220,26 +1277,57 @@ section {
 }
 .seventh-section__buttons {
   position: absolute;
-  top: 35%;
+  width: 30px;
+  height: 30px;
+  top: 33%;
   right: 119px;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
-}
-.seventh-section__prev, .seventh-section__next {
-  width: 11px;
   opacity: 0.3;
+  z-index: 100;
   cursor: pointer;
 }
-.seventh-section__prev:hover, .seventh-section__next:hover {
+.seventh-section__buttons--pic {
+  width: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.seventh-section__buttons:hover {
   opacity: 1;
 }
 .seventh-section__prev {
-  margin-right: 75px;
+  right: 200px;
 }
 .seventh-section__prev--rotate {
   transform: rotate(-180deg);
+}
+.seventh-section__progress-bar {
+  width: 618px;
+  height: 4px;
+  position: absolute;
+  top: 127%;
+  left: 14%;
+}
+.seventh-section__progress-bar--progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: #16202C;
+  transition: 0.5s;
+}
+.seventh-section__progress-bar--line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #16202C;
+  opacity: 0.2;
 }
 
 .eighth-section {
@@ -1555,6 +1643,7 @@ section {
   flex-direction: column;
   align-items: center;
   color: #ffffff;
+  overflow: hidden;
   text-transform: uppercase;
 }
 .footer--hr {

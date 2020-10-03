@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const slidePen = (classPen) => {
         const pen = document.querySelector(classPen);
         
-        pen.style.left = `50%`;
+        pen.style.top = `50%`;
     }
 
     // -------------------------Full-Page-Scroll-------------------------//
@@ -235,6 +235,9 @@ window.addEventListener('DOMContentLoaded', () => {
         slidesClass, 
         btnsPrevClass, 
         btnsNextClass,
+        progressBarClass,
+        progressLineClass,
+        timeChangeSlide,
         active
     }) => {
         const wrapper = document.querySelector(wrapperClass),
@@ -243,6 +246,7 @@ window.addEventListener('DOMContentLoaded', () => {
               btnNext = document.querySelector(btnsNextClass);
 
         let index,
+            progressIndex,
             wrapperWidth,
             widthSlide,
             next = 0,
@@ -253,6 +257,7 @@ window.addEventListener('DOMContentLoaded', () => {
             slides.forEach((slide, i) => {
                 if (slide.classList.contains(active)) {
                     index = i;
+                    if (progressBarClass) { progressIndex = i }
                 }
             });
         };
@@ -264,6 +269,51 @@ window.addEventListener('DOMContentLoaded', () => {
 
             widthSlide = widthSlideComputed + marginRightComputed + marginLeftComputed;
         }
+
+        const setProgress = () => {
+            const progressLine = document.querySelector(progressLineClass);
+
+            slides.forEach((slide, i) => {
+                if (progressIndex === i) {
+                    const progress = ((i + 1)/ (slides.length)) * 100;
+                    progressLine.style.width = `${progress}%`;
+                }
+            });
+        };
+
+        const changeProgressIndex = (side) => {
+            switch (side) {
+                case 'prev':
+                    if (progressIndex > 0) {
+                        progressIndex--;
+                    } else {
+                        progressIndex = slides.length - 1;
+                    }   
+                    setProgress();
+                    break;
+
+                case 'next':
+                    if (progressIndex < slides.length - 1) {
+                        progressIndex++;
+                    } else {
+                        progressIndex = 0;
+                    }    
+                    setProgress();
+                    break;
+            
+                default:
+                    break;
+            }
+        };
+
+        const createProgressBar = () => {
+            const activeSlide = document.querySelector(`.${active}`),
+                  activeSlideLeft = activeSlide.getBoundingClientRect().left;      
+
+            document.querySelector(progressBarClass).style.left = `${activeSlideLeft}px`;
+
+            setProgress();
+        };
 
         const deleteSlide = (side) => {
             const slides = document.querySelectorAll(slidesClass);
@@ -329,16 +379,25 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const startIntervalAutoSlide = () => {
+            addSlide('next');
+            changeSlide();
+            if (progressBarClass) { changeProgressIndex('next'); }
+        };
+
         const addEventClick = (btn) => btn.addEventListener('click', e => {
             e.preventDefault();
 
             if (btn.classList.contains(btnsPrevClass.replace(/\./, ''))) {
                 addSlide('prev');
                 changeSlide();
+                if (progressBarClass) { changeProgressIndex('prev'); }
             }
             if (btn.classList.contains(btnsNextClass.replace(/\./, ''))) {
+
                 addSlide('next');
                 changeSlide();
+                if (progressBarClass) { changeProgressIndex('next'); }
             }
         });
 
@@ -348,6 +407,9 @@ window.addEventListener('DOMContentLoaded', () => {
         createIndex();
         addEventClick(btnPrev);
         addEventClick(btnNext);
+        
+        if (progressBarClass) { createProgressBar(); }
+        if (timeChangeSlide) { setInterval(startIntervalAutoSlide, timeChangeSlide); }
 
     };
 
@@ -355,9 +417,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (window.innerWidth > 1024) {
 
-        document.querySelector('.pen--black').style.left = '110%';
-        document.querySelector('.pen--blue').style.left = '110%';
-        document.querySelector('.pen--white').style.left = '-10%';
+        document.querySelectorAll('.pen').forEach(pen => pen.style.top = '-50%')
 
         fullPageScroll({
             sliderClass: '.slider',
@@ -370,11 +430,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 '.pen--black',
                 '.pen--white',
                 '.pen--blue',
+                '.pen'
             ]
         });
         
     }
-    
 
     slider({
         wrapperClass: '.sixth-section__slider--wrapper',
@@ -390,7 +450,10 @@ window.addEventListener('DOMContentLoaded', () => {
         slidesClass: '.seventh-section__slide',
         btnsPrevClass: '.seventh-section__prev',
         btnsNextClass: '.seventh-section__next',
-        active: 'seventh-section__slide--active'
+        active: 'seventh-section__slide--active',
+        progressBarClass: '.seventh-section__progress-bar',
+        progressLineClass: '.seventh-section__progress-bar--progress',
+        timeChangeSlide: 5000
     });
 
     sliderRound({

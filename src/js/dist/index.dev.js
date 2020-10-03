@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', function () {
   // -------------------------Slide-Pen-------------------------//
   var slidePen = function slidePen(classPen) {
     var pen = document.querySelector(classPen);
-    pen.style.left = "50%";
+    pen.style.top = "50%";
   }; // -------------------------Full-Page-Scroll-------------------------//
 
 
@@ -268,12 +268,16 @@ window.addEventListener('DOMContentLoaded', function () {
         slidesClass = _ref3.slidesClass,
         btnsPrevClass = _ref3.btnsPrevClass,
         btnsNextClass = _ref3.btnsNextClass,
+        progressBarClass = _ref3.progressBarClass,
+        progressLineClass = _ref3.progressLineClass,
+        timeChangeSlide = _ref3.timeChangeSlide,
         active = _ref3.active;
     var wrapper = document.querySelector(wrapperClass),
         slides = document.querySelectorAll(slidesClass),
         btnPrev = document.querySelector(btnsPrevClass),
         btnNext = document.querySelector(btnsNextClass);
     var index,
+        progressIndex,
         wrapperWidth,
         widthSlide,
         next = 0,
@@ -284,6 +288,10 @@ window.addEventListener('DOMContentLoaded', function () {
       slides.forEach(function (slide, i) {
         if (slide.classList.contains(active)) {
           index = i;
+
+          if (progressBarClass) {
+            progressIndex = i;
+          }
         }
       });
     };
@@ -293,6 +301,50 @@ window.addEventListener('DOMContentLoaded', function () {
           marginRightComputed = +window.getComputedStyle(slide).marginRight.replace(/px/, ''),
           widthSlideComputed = +window.getComputedStyle(slide).width.replace(/px/, '');
       widthSlide = widthSlideComputed + marginRightComputed + marginLeftComputed;
+    };
+
+    var setProgress = function setProgress() {
+      var progressLine = document.querySelector(progressLineClass);
+      slides.forEach(function (slide, i) {
+        if (progressIndex === i) {
+          var progress = (i + 1) / slides.length * 100;
+          progressLine.style.width = "".concat(progress, "%");
+        }
+      });
+    };
+
+    var changeProgressIndex = function changeProgressIndex(side) {
+      switch (side) {
+        case 'prev':
+          if (progressIndex > 0) {
+            progressIndex--;
+          } else {
+            progressIndex = slides.length - 1;
+          }
+
+          setProgress();
+          break;
+
+        case 'next':
+          if (progressIndex < slides.length - 1) {
+            progressIndex++;
+          } else {
+            progressIndex = 0;
+          }
+
+          setProgress();
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    var createProgressBar = function createProgressBar() {
+      var activeSlide = document.querySelector(".".concat(active)),
+          activeSlideLeft = activeSlide.getBoundingClientRect().left;
+      document.querySelector(progressBarClass).style.left = "".concat(activeSlideLeft, "px");
+      setProgress();
     };
 
     var deleteSlide = function deleteSlide(side) {
@@ -369,6 +421,15 @@ window.addEventListener('DOMContentLoaded', function () {
       });
     };
 
+    var startIntervalAutoSlide = function startIntervalAutoSlide() {
+      addSlide('next');
+      changeSlide();
+
+      if (progressBarClass) {
+        changeProgressIndex('next');
+      }
+    };
+
     var addEventClick = function addEventClick(btn) {
       return btn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -376,11 +437,19 @@ window.addEventListener('DOMContentLoaded', function () {
         if (btn.classList.contains(btnsPrevClass.replace(/\./, ''))) {
           addSlide('prev');
           changeSlide();
+
+          if (progressBarClass) {
+            changeProgressIndex('prev');
+          }
         }
 
         if (btn.classList.contains(btnsNextClass.replace(/\./, ''))) {
           addSlide('next');
           changeSlide();
+
+          if (progressBarClass) {
+            changeProgressIndex('next');
+          }
         }
       });
     };
@@ -392,13 +461,21 @@ window.addEventListener('DOMContentLoaded', function () {
     createIndex();
     addEventClick(btnPrev);
     addEventClick(btnNext);
+
+    if (progressBarClass) {
+      createProgressBar();
+    }
+
+    if (timeChangeSlide) {
+      setInterval(startIntervalAutoSlide, timeChangeSlide);
+    }
   }; // -------------------------Start-Scripts-------------------------//
 
 
   if (window.innerWidth > 1024) {
-    document.querySelector('.pen--black').style.left = '110%';
-    document.querySelector('.pen--blue').style.left = '110%';
-    document.querySelector('.pen--white').style.left = '-10%';
+    document.querySelectorAll('.pen').forEach(function (pen) {
+      return pen.style.top = '-50%';
+    });
     fullPageScroll({
       sliderClass: '.slider',
       wrapperClass: '.wrapper',
@@ -406,7 +483,7 @@ window.addEventListener('DOMContentLoaded', function () {
       headerLink: '.header__link',
       footerLink: '.footer__list--white',
       active: 'section--active',
-      penClasses: ['.pen--black', '.pen--white', '.pen--blue']
+      penClasses: ['.pen--black', '.pen--white', '.pen--blue', '.pen']
     });
   }
 
@@ -423,7 +500,10 @@ window.addEventListener('DOMContentLoaded', function () {
     slidesClass: '.seventh-section__slide',
     btnsPrevClass: '.seventh-section__prev',
     btnsNextClass: '.seventh-section__next',
-    active: 'seventh-section__slide--active'
+    active: 'seventh-section__slide--active',
+    progressBarClass: '.seventh-section__progress-bar',
+    progressLineClass: '.seventh-section__progress-bar--progress',
+    timeChangeSlide: 5000
   });
   sliderRound({
     wrapperClass: '.eighth-section__wrapper',
