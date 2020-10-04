@@ -1390,6 +1390,7 @@ section {
   font-size: 15px;
   text-align: center;
   transition: 0.3s;
+  line-height: 17px;
 }
 .eighth-section__slide--content {
   opacity: 0.4;
@@ -1447,6 +1448,9 @@ section {
 }
 .eighth-section__prev, .eighth-section__next {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 276px;
   right: 63px;
   width: 14px;

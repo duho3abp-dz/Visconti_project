@@ -363,7 +363,7 @@ section {
             }
         }
 
-        &--sm {
+        &--sm {;
             font-size: 20px;
             margin: 0 0 35px;
             position: relative;
@@ -1155,6 +1155,7 @@ section {
         font-size: 15px;
         text-align: center;
         transition: 0.3s;
+        line-height: 17px;
 
         &--content {
             opacity: .4;
@@ -1220,7 +1221,10 @@ section {
     }
 
     &__prev, &__next {
-        position: absolute;    
+        position: absolute;   
+        display: flex; 
+        justify-content: center;
+        align-items: center;
         top: 276px;
         right: 63px;
         width: 14px;
