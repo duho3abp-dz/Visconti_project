@@ -222,6 +222,14 @@ window.addEventListener('DOMContentLoaded', () => {
             changeSlide(index);
         }));
 
+        // -------------------------------
+        slides.forEach(slide => slide.addEventListener('touchmove', e => {
+            e.preventDefault();
+
+            console.dir(e.targetTouches[0].pageX);
+        }));
+        // -------------------------------
+
         createIndex();
         settingSliderParameters();
         addEventClick(btnsPrev);

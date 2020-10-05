@@ -254,7 +254,15 @@ window.addEventListener('DOMContentLoaded', function () {
           changeSlide(index);
         });
       });
-    };
+    }; // -------------------------------
+
+
+    slides.forEach(function (slide) {
+      return slide.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        console.dir(e.targetTouches[0].pageX);
+      });
+    }); // -------------------------------
 
     createIndex();
     settingSliderParameters();
