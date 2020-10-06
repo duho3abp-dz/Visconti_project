@@ -216,19 +216,36 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (index > slides.length - 1) {
                     index = slides.length - 1
                 }
-                
             }
             
             changeSlide(index);
         }));
 
-        // -------------------------------
-        slides.forEach(slide => slide.addEventListener('touchmove', e => {
-            e.preventDefault();
+        slides.forEach(slide => slide.addEventListener('touchstart', e => {
+            const startTouch = e.targetTouches[0].pageX;
 
-            console.dir(e.targetTouches[0].pageX);
+            const touchMoveSlide = (e) => {
+                e.preventDefault();
+    
+                if (startTouch > e.targetTouches[0].pageX) {
+                    index++;
+                    if (index > slides.length - 1) {
+                        index = slides.length - 1
+                    }
+                }
+                if (startTouch < e.targetTouches[0].pageX) {
+                    index--;
+                    if (index < 0) {
+                        index = 0
+                    }
+                }
+
+                changeSlide(index);
+                slide.removeEventListener('touchmove', touchMoveSlide);
+            };
+
+            slide.addEventListener('touchmove', touchMoveSlide);
         }));
-        // -------------------------------
 
         createIndex();
         settingSliderParameters();
@@ -402,12 +419,37 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (progressBarClass) { changeProgressIndex('prev'); }
             }
             if (btn.classList.contains(btnsNextClass.replace(/\./, ''))) {
-
                 addSlide('next');
                 changeSlide();
                 if (progressBarClass) { changeProgressIndex('next'); }
             }
         });
+
+        const addTouchEvent = () => {
+            wrapper.addEventListener('touchstart', e => {
+                const startTouch = e.targetTouches[0].pageX;
+        
+                const touchMoveSlide = (e) => {
+                    e.preventDefault();
+        
+                    if (startTouch > e.targetTouches[0].pageX) {
+                        addSlide('next');
+                        changeSlide();
+                        if (progressBarClass) { changeProgressIndex('next'); }
+                    }
+                    if (startTouch < e.targetTouches[0].pageX) {
+                        addSlide('prev');
+                        changeSlide();
+                        if (progressBarClass) { changeProgressIndex('prev'); }
+                    }
+    
+                    changeSlide(index);
+                    wrapper.removeEventListener('touchmove', touchMoveSlide);
+                };
+                    
+                wrapper.addEventListener('touchmove', touchMoveSlide);
+            });
+        };
 
         wrapperWidth = +window.getComputedStyle(document.querySelector(wrapperClass)).width.replace(/px/, '');
         document.querySelectorAll(slidesClass).forEach(slide => !slide.classList.contains(active) ? setWidthSlide(slide) : null );
@@ -415,6 +457,7 @@ window.addEventListener('DOMContentLoaded', () => {
         createIndex();
         addEventClick(btnPrev);
         addEventClick(btnNext);
+        addTouchEvent();
         
         if (progressBarClass) { createProgressBar(); }
         if (timeChangeSlide) { setInterval(startIntervalAutoSlide, timeChangeSlide); }

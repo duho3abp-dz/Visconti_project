@@ -254,16 +254,38 @@ window.addEventListener('DOMContentLoaded', function () {
           changeSlide(index);
         });
       });
-    }; // -------------------------------
-
+    };
 
     slides.forEach(function (slide) {
-      return slide.addEventListener('touchmove', function (e) {
-        e.preventDefault();
-        console.dir(e.targetTouches[0].pageX);
-      });
-    }); // -------------------------------
+      return slide.addEventListener('touchstart', function (e) {
+        var startTouch = e.targetTouches[0].pageX;
 
+        var touchMoveSlide = function touchMoveSlide(e) {
+          e.preventDefault();
+
+          if (startTouch > e.targetTouches[0].pageX) {
+            index++;
+
+            if (index > slides.length - 1) {
+              index = slides.length - 1;
+            }
+          }
+
+          if (startTouch < e.targetTouches[0].pageX) {
+            index--;
+
+            if (index < 0) {
+              index = 0;
+            }
+          }
+
+          changeSlide(index);
+          slide.removeEventListener('touchmove', touchMoveSlide);
+        };
+
+        slide.addEventListener('touchmove', touchMoveSlide);
+      });
+    });
     createIndex();
     settingSliderParameters();
     addEventClick(btnsPrev);
@@ -462,6 +484,39 @@ window.addEventListener('DOMContentLoaded', function () {
       });
     };
 
+    var addTouchEvent = function addTouchEvent() {
+      wrapper.addEventListener('touchstart', function (e) {
+        var startTouch = e.targetTouches[0].pageX;
+
+        var touchMoveSlide = function touchMoveSlide(e) {
+          e.preventDefault();
+
+          if (startTouch > e.targetTouches[0].pageX) {
+            addSlide('next');
+            changeSlide();
+
+            if (progressBarClass) {
+              changeProgressIndex('next');
+            }
+          }
+
+          if (startTouch < e.targetTouches[0].pageX) {
+            addSlide('prev');
+            changeSlide();
+
+            if (progressBarClass) {
+              changeProgressIndex('prev');
+            }
+          }
+
+          changeSlide(index);
+          wrapper.removeEventListener('touchmove', touchMoveSlide);
+        };
+
+        wrapper.addEventListener('touchmove', touchMoveSlide);
+      });
+    };
+
     wrapperWidth = +window.getComputedStyle(document.querySelector(wrapperClass)).width.replace(/px/, '');
     document.querySelectorAll(slidesClass).forEach(function (slide) {
       return !slide.classList.contains(active) ? setWidthSlide(slide) : null;
@@ -469,6 +524,7 @@ window.addEventListener('DOMContentLoaded', function () {
     createIndex();
     addEventClick(btnPrev);
     addEventClick(btnNext);
+    addTouchEvent();
 
     if (progressBarClass) {
       createProgressBar();
