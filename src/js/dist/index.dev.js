@@ -538,7 +538,11 @@ window.addEventListener('DOMContentLoaded', function () {
 
   if (window.innerWidth > 1024) {
     document.querySelectorAll('.pen').forEach(function (pen) {
-      return pen.style.top = '-50%';
+      if (pen.classList.contains('pen--violet')) {
+        pen.style.left = '50%';
+      } else {
+        pen.style.top = '-50%';
+      }
     });
     fullPageScroll({
       sliderClass: '.slider',

@@ -431,6 +431,10 @@ section {
   transform: translateX(-45%) translateY(-50%);
   transition: 1s all ease-in-out;
 }
+.pen--violet {
+  left: -20%;
+  transition: 1.5s all ease-in-out;
+}
 .pen--blue {
   transform: translateX(-58%) translateY(-50%);
 }
@@ -474,13 +478,13 @@ section {
   background-size: cover;
   color: #fff;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   position: relative;
   text-align: center;
   padding: 20px;
 }
 .first-section__block {
-  width: 420px;
+  width: 35%;
 }
 .first-section__title {
   font-size: 24px;
@@ -525,14 +529,6 @@ section {
 .first-section__link::after {
   left: unset;
   right: -40px;
-}
-.first-section__img {
-  background-image: url("/src/img/first-pen.png");
-  background-position: center center;
-  background-size: cover;
-  height: 452px;
-  margin: 0 50px;
-  width: 100px;
 }
 
 .second-section {

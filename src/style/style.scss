@@ -7,10 +7,6 @@
     font-weight: 400;
 }
 
-// body {
-      
-// }
-
 h2, h3 {
     text-transform: uppercase;
 }
@@ -61,6 +57,11 @@ section {
     transform: translateX(-45%) translateY(-50%);
     transition: 1s all ease-in-out;
 
+    &--violet {
+        left: -20%;
+        transition: 1.5s all ease-in-out;
+    }
+
     &--blue {
         transform: translateX(-58%) translateY(-50%);
     }
@@ -110,13 +111,13 @@ section {
     background-size: cover;
     color: #fff;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     position: relative;
     text-align: center;
     padding: 20px;
 
     &__block {
-        width: 420px;
+        width: 35%;
     }
 
     &__title {
@@ -169,15 +170,6 @@ section {
             left: unset;
             right: -40px;
         }
-    }
-
-    &__img {
-        background-image: url("/src/img/first-pen.png");
-        background-position: center center;
-        background-size: cover;
-        height: 452px;
-        margin: 0 50px;
-        width: 100px;
     }
 }
 

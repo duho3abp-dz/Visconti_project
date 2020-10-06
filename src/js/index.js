@@ -468,7 +468,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (window.innerWidth > 1024) {
 
-        document.querySelectorAll('.pen').forEach(pen => pen.style.top = '-50%')
+        document.querySelectorAll('.pen').forEach(pen => {
+            if (pen.classList.contains('pen--violet')) {
+                pen.style.left = '50%';
+            } else {
+                pen.style.top = '-50%';
+            }
+        })
 
         fullPageScroll({
             sliderClass: '.slider',
